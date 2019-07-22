@@ -15,7 +15,7 @@ function setCamerasHandler(callback) {
 
 const loadCameras = (callback) => {
     const jsonpCallback = 'camerasHandler';
-    const limit = 10;
+    const limit = 7;
 
     let nextSeed = state.getNextSeed();
 

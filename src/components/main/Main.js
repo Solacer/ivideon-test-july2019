@@ -48,12 +48,18 @@ export default class App extends React.Component {
             inFullscreenMode: true
         });
     }
+    handleCameraDeselection() {
+        this.selectedCamera = null;
+        this.setState({
+            inFullscreenMode: false
+        });
+    }
 
     render() {
         return (
             <div className="main-component">
                 {this.state.cameras.map(camera => (
-                    <div className="camera-preview">
+                    <div key={`${camera.serverId}_${camera.cameraId}`} className="camera-preview">
                         <CameraPreview
                             key={`${camera.serverId}_${camera.cameraId}`}
                             camera={camera}
@@ -65,7 +71,10 @@ export default class App extends React.Component {
                     <div className="fullscreen-wrapper">
                         <div className="fullscreen-overlay"></div>
                         <div className="camera-wrapper">
-                            <Camera camera={this.selectedCamera} />
+                            <Camera
+                                camera={this.selectedCamera}
+                                onclick={this.handleCameraDeselection.bind(this)}
+                            />
                         </div>
                     </div>
                 ) : ''}

@@ -1,0 +1,22 @@
+@import './../../../common';
+
+.camera-component {
+  width: 100%;
+  max-width: $maxWidth;
+  position: relative;
+
+  img {
+    width: 100%;
+  }
+
+  .camera-cross {
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    font-size: 18px;
+    color: #f3f3f3;
+    z-index: 520;
+    text-shadow: 2px 0 0 #656565, -2px 0 0 #656565, 0 2px 0 #656565, 0 -2px 0 #656565, 1px 1px #656565, -1px -1px 0 #656565, 1px -1px 0 #656565, -1px 1px 0 #656565;
+    cursor: pointer;
+  }
+}

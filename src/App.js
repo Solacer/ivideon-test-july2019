@@ -5,8 +5,10 @@ import Main from 'components/main/Main.js';
 export default class App extends React.Component {
     render() {
         return (
-            <div className="app-component">
-                <Main />
+            <div className="global-wrapper">
+                <div className="app-component">
+                    <Main />
+                </div>
             </div>
         );
     }

@@ -1,5 +1,6 @@
 import {appConfig} from 'app-config/app-config.js';
 import {testData} from 'data-source/test-data.js'
+import {state} from 'state/state.js';
 
 const CAMERA_SCRIPT_ID = 'get_cameras_loader';
 const CAM_LIST_URL = 'https://api.ivideon.com/tv/cameras';
@@ -12,11 +13,11 @@ function setCamerasHandler(callback) {
     };
 }
 
-let nextSeed = null;
-
 const loadCameras = (callback) => {
     const jsonpCallback = 'camerasHandler';
     const limit = 10;
+
+    let nextSeed = state.getNextSeed();
 
     const script = document.createElement('script');
     script.src = `${CAM_LIST_URL}?jsonp=${jsonpCallback}&limit=${limit}${nextSeed ? `&seed=${nextSeed}}` : ''}`;
@@ -28,7 +29,6 @@ const loadCameras = (callback) => {
 };
 
 export const dataSource = {
-    setSeed: (seedId) => (nextSeed = seedId),
     getCameras: (callback) => {
         if (appConfig.useMocks === false) {
             loadCameras(callback);
@@ -39,4 +39,3 @@ export const dataSource = {
 };
 
 window.camerasHandler = ()=>null;
-

@@ -9,7 +9,7 @@ export class CameraInstance {
 
     constructor(params) {
         if (!params.serverId || !params.cameraId || !params.width || !params.height) {
-            console.error('cannot create new CameraInstance: not enough parameters to initialize');
+            throw new Error('cannot create new CameraInstance: not enough parameters to initialize');
         }
         this.serverId = params.serverId;
         this.cameraId = params.cameraId;

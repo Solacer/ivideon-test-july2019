@@ -5,7 +5,7 @@ import Main from 'components/main/Main.js';
 export default class App extends React.Component {
     render() {
         return (
-            <div className="App">
+            <div className="app-component">
                 <Main />
             </div>
         );

@@ -1,4 +1,4 @@
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {CameraInstance} from 'objects/CameraInstance.js';
 
 const state_ = {
@@ -24,5 +24,3 @@ export const state = {
     setNextSeed: (seed) => (state_.nextSeed = seed),
     getNextSeed: () => state_.nextSeed
 };
-
-window.state__ = state;

@@ -1,0 +1,14 @@
+@import './../../common';
+
+.main-component {
+  border: 1px solid $borderColor;
+}
+
+.camera-preview {
+  height: 80px;
+  width: 100%;
+  overflow: hidden;
+  &:not(:last-child) {
+    border-bottom: 1px solid $borderColor;
+  }
+}

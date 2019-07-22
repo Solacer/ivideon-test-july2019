@@ -3,17 +3,72 @@ import './Main.scss';
 import {dataSource} from 'data-source/data-source.js';
 import {state} from 'state/state.js';
 import CameraPreview from 'components/main/camera-preview/CameraPreview.js';
+import Camera from 'components/main/camera/Camera.js';
 import {CameraInstance} from 'objects/CameraInstance.js';
 
 export default class App extends React.Component {
-    cameras = [1,2,3];
+
+    mounted_ = false;
+    camerasSubscription = null;
+    selectedCamera = null;
+
+    constructor() {
+        super();
+
+        this.state = {
+            cameras: [],
+            inFullscreenMode: false
+        };
+
+        this.subscribeToCameras();
+    }
+
+    fireCamerasLoad() {
+        dataSource.getCameras((data) => {
+            if (data && data.response && data.response.cameras && data.response.seeds) {
+                state.setCamerasList(data.response.cameras.map(this.camerasConverter));
+                state.setNextSeed(data.response.seeds.next);
+            }
+        });
+    }
+
+    subscribeToCameras() {
+        this.camerasSubscription = state.getCamerasList$()
+            .subscribe((camerasArray) => {
+                if (!this.mounted_) {return;}
+                this.setState({
+                    cameras: camerasArray
+                });
+            });
+    }
+
+    handleCameraSelection(camera) {
+        this.selectedCamera = camera;
+        this.setState({
+            inFullscreenMode: true
+        });
+    }
 
     render() {
         return (
-            <div className="Main">
-                {this.cameras.map(id => (
-                    <CameraPreview id={id} key={id} />
+            <div className="main-component">
+                {this.state.cameras.map(camera => (
+                    <div className="camera-preview">
+                        <CameraPreview
+                            key={`${camera.serverId}_${camera.cameraId}`}
+                            camera={camera}
+                            onclick={this.handleCameraSelection.bind(this)}
+                        />
+                    </div>
                 ))}
+                {this.state.inFullscreenMode ? (
+                    <div className="fullscreen-wrapper">
+                        <div className="fullscreen-overlay"></div>
+                        <div className="camera-wrapper">
+                            <Camera camera={this.selectedCamera} />
+                        </div>
+                    </div>
+                ) : ''}
             </div>
         );
     }
@@ -31,11 +86,14 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
-        dataSource.getCameras((data) => {
-            if (data && data.response && data.response.cameras && data.response.seeds) {
-                state.setCamerasList(data.response.cameras.map(this.camerasConverter));
-                state.setNextSeed(data.response.seeds.next);
-            }
-        });
+        this.mounted_ = true;
+        this.fireCamerasLoad();
+    }
+
+    componentWillUnmount() {
+        this.mounted_ = false;
+        if (this.camerasSubscription && this.camerasSubscription.unsubscribe) {
+            this.camerasSubscription.unsubscribe();
+        }
     }
 }

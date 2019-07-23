@@ -11,6 +11,7 @@ export default class App extends React.Component {
     mounted_ = false;
     camerasSubscription = null;
     selectedCamera = null;
+    requestedCamerasNumber = 7;
 
     constructor() {
         super();
@@ -29,7 +30,16 @@ export default class App extends React.Component {
                 state.setCamerasList(data.response.cameras.map(this.camerasConverter));
                 state.setNextSeed(data.response.seeds.next);
             }
-        });
+        }, this.requestedCamerasNumber);
+    }
+
+    fireLoadMoreCameras() {
+        dataSource.getMoreCameras((data) => {
+            if (data && data.response && data.response.cameras && data.response.seeds) {
+                state.addCamerasList(data.response.cameras.map(this.camerasConverter));
+                state.setNextSeed(data.response.seeds.next);
+            }
+        }, this.requestedCamerasNumber);
     }
 
     subscribeToCameras() {
@@ -55,18 +65,55 @@ export default class App extends React.Component {
         });
     }
 
+    onRequestedNumberChange(event) {
+        const input = event.target;
+        const newValue = input.value;
+        if (!isNaN(newValue)) {
+            setTimeout(() => {
+                input.value = this.requestedCamerasNumber = newValue;
+            }, 50);
+        }
+    }
+
     render() {
         return (
-            <div className="main-component">
-                {this.state.cameras.map(camera => (
-                    <div key={`${camera.serverId}_${camera.cameraId}`} className="camera-preview">
-                        <CameraPreview
-                            key={`${camera.serverId}_${camera.cameraId}`}
-                            camera={camera}
-                            onclick={this.handleCameraSelection.bind(this)}
-                        />
+            <div className="main-wrapper">
+                <div className="main-component">
+                    <div className="main-header">
+                        Favorite Cameras
                     </div>
-                ))}
+                    {this.state.cameras.map(camera => (
+                        <div key={`${camera.serverId}_${camera.cameraId}`} className="camera-preview">
+                            <CameraPreview
+                                key={`${camera.serverId}_${camera.cameraId}`}
+                                camera={camera}
+                                onclick={this.handleCameraSelection.bind(this)}
+                                />
+                        </div>
+                    ))}
+                    <div className="main-footer">
+                        <div
+                            className="button top"
+                            onClick={this.scrollToTop.bind(this)}
+                        >
+                            <span>↑ Top</span>
+                        </div>
+                        <div className="number-input">
+                            More:
+                            <input
+                                type="number"
+                                value={this.requestedCamerasNumber}
+                                onChange={this.onRequestedNumberChange.bind(this)}
+                                />
+                        </div>
+                        <div
+                            className="button next"
+                            onClick={this.fireLoadMoreCameras.bind(this)}
+                        >
+                            <span>Next</span>
+                        </div>
+                    </div>
+                </div>
                 {this.state.inFullscreenMode ? (
                     <div className="fullscreen-wrapper">
                         <div className="fullscreen-overlay"></div>
@@ -74,7 +121,7 @@ export default class App extends React.Component {
                             <Camera
                                 camera={this.selectedCamera}
                                 onclick={this.handleCameraDeselection.bind(this)}
-                            />
+                                />
                         </div>
                     </div>
                 ) : ''}
@@ -91,6 +138,13 @@ export default class App extends React.Component {
             views: rawCamObj.total_views,
             width: rawCamObj.width,
             height: rawCamObj.height
+        });
+    }
+
+    scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
         });
     }
 

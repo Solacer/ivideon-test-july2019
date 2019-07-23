@@ -5,10 +5,37 @@
   max-width: $maxWidth;
   position: relative;
 
-  img {
-    width: 100%;
-    background-color: black;
-    display: inherit;
+  .picture-wrapper {
+    position: relative;
+
+    img {
+      width: 100%;
+      background-color: black;
+      display: inherit;
+    }
+
+    .errorBlock {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 550;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+
+      .refresh-button {
+        text-transform: uppercase;
+        border: 1px solid white;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 3px 7px;
+        margin: 10px;
+        width: 110px;
+      }
+    }
   }
 
   .camera-cross {
@@ -24,13 +51,15 @@
 
   .camera-info {
     background-color: white;
-    height: 70px;
+    height: 90px;
     padding: 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
     text-align: left;
+    border-left: 1px solid $borderColor;
+    border-right: 1px solid $borderColor;
 
     .camera-titles {
       flex: auto 0 1;
@@ -52,6 +81,8 @@
         font-size: 16px;
         color: black;
         word-wrap: break-word;
+        overflow-y: hidden;
+        max-height: 45px;
 
         @media screen and (max-width: 480px) and (min-width: 400px) {
           font-size: 14px;

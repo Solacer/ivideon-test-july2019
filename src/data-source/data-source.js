@@ -4,6 +4,7 @@ import {state} from 'state/state.js';
 
 const CAMERA_SCRIPT_ID = 'get_cameras_loader';
 const CAM_LIST_URL = 'https://api.ivideon.com/tv/cameras';
+const DEFAULT_REQUESTED_NUMBER = 7;
 
 function setCamerasHandler(callback) {
     window.camerasHandler = (response) => {
@@ -13,14 +14,12 @@ function setCamerasHandler(callback) {
     };
 }
 
-const loadCameras = (callback) => {
+const loadCameras = (callback, requestedNumber, nextSeed) => {
     const jsonpCallback = 'camerasHandler';
-    const limit = 7;
-
-    let nextSeed = state.getNextSeed();
+    const limit = requestedNumber ? requestedNumber : DEFAULT_REQUESTED_NUMBER;
 
     const script = document.createElement('script');
-    script.src = `${CAM_LIST_URL}?jsonp=${jsonpCallback}&limit=${limit}${nextSeed ? `&seed=${nextSeed}}` : ''}`;
+    script.src = `${CAM_LIST_URL}?jsonp=${jsonpCallback}&limit=${limit}${nextSeed ? `&seed=${nextSeed}` : ''}`;
     script.id = CAMERA_SCRIPT_ID;
 
     setCamerasHandler(callback);
@@ -29,9 +28,17 @@ const loadCameras = (callback) => {
 };
 
 export const dataSource = {
-    getCameras: (callback) => {
+    getCameras: (callback, requestedNumber) => {
         if (appConfig.useMocks === false) {
-            loadCameras(callback);
+            loadCameras(callback, requestedNumber);
+        } else {
+            callback(testData.camerasList);
+        }
+    },
+    getMoreCameras: (callback, requestedNumber) => {
+        if (appConfig.useMocks === false) {
+            const nextSeed = state.getNextSeed();
+            loadCameras(callback, requestedNumber, nextSeed);
         } else {
             callback(testData.camerasList);
         }

@@ -1,5 +1,6 @@
 @import 'common';
 
+// this became useless with introduction of fixed position, but I'd leave it for possible future changes
 .global-wrapper {
   width: 100%;
   display: flex;

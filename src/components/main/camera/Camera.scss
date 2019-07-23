@@ -7,6 +7,8 @@
 
   img {
     width: 100%;
+    background-color: black;
+    display: inherit;
   }
 
   .camera-cross {
@@ -18,5 +20,60 @@
     z-index: 520;
     text-shadow: 2px 0 0 #656565, -2px 0 0 #656565, 0 2px 0 #656565, 0 -2px 0 #656565, 1px 1px #656565, -1px -1px 0 #656565, 1px -1px 0 #656565, -1px 1px 0 #656565;
     cursor: pointer;
+  }
+
+  .camera-info {
+    background-color: white;
+    height: 70px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: left;
+
+    .camera-titles {
+      flex: auto 0 1;
+
+      .camera-name {
+        font-size: 18px;
+        color: blue;
+        word-wrap: break-word;
+
+        @media screen and (max-width: 480px) and (min-width: 400px) {
+          font-size: 16px;
+        }
+        @media screen and (max-width: 399px) {
+          font-size: 13px;
+        }
+      }
+
+      .camera-description {
+        font-size: 16px;
+        color: black;
+        word-wrap: break-word;
+
+        @media screen and (max-width: 480px) and (min-width: 400px) {
+          font-size: 14px;
+        }
+        @media screen and (max-width: 399px) {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .camera-views {
+      flex: auto 0 1;
+      text-transform: uppercase;
+      font-size: 13px;
+      color: #a0a0a0;
+
+      @media screen and (max-width: 480px) and (min-width: 400px) {
+        font-size: 11px;
+      }
+      @media screen and (max-width: 399px) {
+        font-size: 9px;
+      }
+    }
   }
 }

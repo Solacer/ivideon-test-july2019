@@ -22,20 +22,36 @@ export default class Camera extends React.Component {
     }
 
     render() {
+        const c = this.props.camera;
+        const cameraWidth = window.innerWidth;
+        const cameraHeight = window.innerWidth * (c.height / c.width);
         return (
             <div className="camera-component">
-                <img
-                    alt={this.props.camera.cameraName}
-                    src={this.state.imageSrc}
-                />
                 <span
                     role="img"
                     aria-label="Close"
                     className="camera-cross"
                     onClick={this.emitCloseCamera.bind(this)}
-                >
-                    ❌
-                </span>
+                >❌</span>
+                <img
+                    alt={c.cameraName}
+                    src={this.state.imageSrc}
+                    width={cameraWidth}
+                    height={cameraHeight}
+                />
+                <div className="camera-info">
+                    <div className="camera-titles">
+                        <div className="camera-name">
+                            {c.cameraName}
+                        </div>
+                        <div className="camera-description">
+                            {c.cameraDescription}
+                        </div>
+                    </div>
+                    <div className="camera-views">
+                        Total views: {c.views}
+                    </div>
+                </div>
             </div>
         );
     }
